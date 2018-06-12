@@ -8,13 +8,25 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Tasklist</a>
+                <a class="navbar-brand" href="/">myTASKLISTS Manager</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>{!! link_to_route('signup.get', 'Signup') !!}</li>
-                    <li><a href="#">Login</a></li>
-                    <li>{!! link_to_route('tasklists.create', 'ADD a new task') !!}</li>
+                    @if (Auth::check())
+                        <li><a href="#">Users</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">MY TASKS</a></li>
+                                <li>{!! link_to_route('tasklists.create', 'ADD a new task') !!}</li>
+                                <li role="separator" class="divider"></li>
+                                <li>{!! link_to_route('logout.get', 'LOGOUT') !!}</li>
+                            </ul>
+                        </li>
+                    @else
+                        <li>{!! link_to_route('signup.get', 'SIGNUP') !!}</li>
+                        <li>{!! link_to_route('login', 'LOGIN') !!}</li>
+                    @endif
                 </ul>
             </div>
         </div>

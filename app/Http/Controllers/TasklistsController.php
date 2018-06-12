@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Tasklist;    // add
+use App\Tasklist;
+
 
 class TasklistsController extends Controller
 {
@@ -15,11 +16,20 @@ class TasklistsController extends Controller
      */
     public function index()
     {
-        $tasklists = Tasklist::all();
+        $data = [];
+        if (\Auth::check()) {
+            $user = \Auth::user();
+            $tasklists = $user->tasklists()->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('tasklists.index', [
-            'tasklists' => $tasklists,
-        ]);
+            $data = [
+                'user' => $user,
+                'tasklists' => $tasklists,
+            ];
+            return view('tasklists.index', $data);
+        }
+        else {
+            return view('welcome');
+        }
     }
 
 
@@ -49,10 +59,11 @@ class TasklistsController extends Controller
             'status' => 'required|max:10',   // added
             'content' => 'required|max:191',
         ]);
-        $tasklist = new Tasklist;
-        $tasklist->status = $request->status;    // added
-        $tasklist->content = $request->content;
-        $tasklist->save();
+        $request->user()->tasklists()->create([
+            'status' => $request->status,
+            'content' => $request->content,
+        ]);
+
 
         return redirect('/');
     }
@@ -114,9 +125,13 @@ class TasklistsController extends Controller
      */
     public function destroy($id)
     {
+         $micropost = \App\Tasklist::find($id);
+
+        if (\Auth::user()->id === $micropost->user_id) {
+        
         $tasklist = Tasklist::find($id);
         $tasklist->delete();
-
+        }
         return redirect('/');
     }
 }
