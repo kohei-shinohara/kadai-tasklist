@@ -125,9 +125,9 @@ class TasklistsController extends Controller
      */
     public function destroy($id)
     {
-         $micropost = \App\Tasklist::find($id);
+         $tasklist = \App\Tasklist::find($id);
 
-        if (\Auth::user()->id === $micropost->user_id) {
+        if (\Auth::user()->id === $tasklist->user_id) {
         
         $tasklist = Tasklist::find($id);
         $tasklist->delete();
