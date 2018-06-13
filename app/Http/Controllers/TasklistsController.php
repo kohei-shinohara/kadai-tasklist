@@ -76,18 +76,19 @@ class TasklistsController extends Controller
      */
     public function show($id)
     {
-     
+      if (\Auth::check()) {
         $tasklist = Tasklist::find($id);
         $user = \Auth::user($id);
-        if ($user->id=== $tasklist->user_id){
-           return view('tasklists.show', [
-               'tasklist'=> $tasklist
-               ]);
-       }
-        else {
-        return redirect('/');
+            if ($user->id=== $tasklist->user_id){
+             return view('tasklists.show', [
+                  'tasklist'=> $tasklist
+                  ]);
+             }else {
+            return redirect('/');
+            }
+      }else {
+        return view('welcome');
         }
-       
     }
 
     /**
