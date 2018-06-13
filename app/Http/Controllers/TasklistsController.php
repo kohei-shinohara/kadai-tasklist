@@ -79,13 +79,13 @@ class TasklistsController extends Controller
      
         $tasklist = Tasklist::find($id);
         $user = \Auth::user($id);
-        if ($user->id== $tasklist->user_id){
+        if ($user->id=== $tasklist->user_id){
            return view('tasklists.show', [
                'tasklist'=> $tasklist
                ]);
        }
         else {
-        return view('/');
+        return redirect('/');
         }
        
     }
@@ -99,10 +99,17 @@ class TasklistsController extends Controller
     public function edit($id)
     {
         $tasklist = Tasklist::find($id);
-
-        return view('tasklists.edit', [
-            'tasklist' => $tasklist,
-        ]);
+        $user = \Auth::user($id);
+        
+        if ($user->id=== $tasklist->user_id){
+           return view('tasklists.edit', [
+               'tasklist'=> $tasklist
+               ]);
+       }
+        else {
+        return redirect('/');
+        }
+       
     }
 
     /**
