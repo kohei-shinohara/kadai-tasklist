@@ -141,11 +141,11 @@ class TasklistsController extends Controller
      */
     public function destroy($id)
     {
-         $tasklist = \App\Tasklist::find($id);
+        $tasklist = \App\Tasklist::find($id);
 
         if (\Auth::user()->id === $tasklist->user_id) {
         
-        $tasklist = Tasklist::find($id);
+
         $tasklist->delete();
         }
         return redirect('/');
