@@ -85,7 +85,7 @@ class TasklistsController extends Controller
                ]);
        }
         else {
-        return view('/');
+        return view('welcome');
         }
        
     }
