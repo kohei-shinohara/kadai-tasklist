@@ -76,21 +76,16 @@ class TasklistsController extends Controller
      */
     public function show($id)
     {
-       if (\Auth::check()) {
-           $user = User::find($id);
-        $tasklists = $user->tasklists()->orderBy('created_at', 'desc')->paginate(10);
-
-        $data = [
-            'user' => $user,
-            'tasklists' => $tasklists,
-        ];
-
-        $data += $this->counts($user);
-
-        return view('tasklists.show', $data);
+     
+        $tasklist = Tasklist::find($id);
+        $user = \Auth::user($id);
+        if ($user->id== $tasklist->user_id){
+           return view('tasklists.show', [
+               'tasklist'=> $tasklist
+               ]);
        }
         else {
-        return view('welcome');
+        return view('/');
         }
        
     }
